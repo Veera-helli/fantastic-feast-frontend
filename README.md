@@ -12,3 +12,9 @@ A meal planning website that let's users add their favourite recipies to a weekl
 - Remove recipes
 - Go to recipe website
 - Log out
+
+# Future developments to come
+
+- Calendar based interface (not just one week)
+- Possibility to create own comments to recipes (in-app)
+- Possibility to create own recipes (ingredients + instructions)
