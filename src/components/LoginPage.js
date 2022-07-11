@@ -1,7 +1,3 @@
-//import LoginForm from './LoginForm';
-import brandImg from '../images/ingredients_hero.jpg';
-import { useState } from 'react';
-
 const Login = ({
   handleLogin,
   username,

@@ -1,4 +1,3 @@
-import brandImg from '../images/ingredients_hero.jpg';
 import { useState } from 'react';
 import WeekdayColumn from './WeekdayColumn';
 import recipeService from '../services/recipes';
@@ -24,7 +23,7 @@ const ContentPage = ({
     if (window.confirm(`Are you sure you want to remove ${recipe.name}?`)) {
       console.log('DELETING RECIPE');
       await recipeService.remove(recipe.id);
-      const recipes = await recipeService.getAll();
+      const recipes = await recipeService.getAll(user.id);
       setRecipes(recipes);
     }
   };
@@ -41,7 +40,7 @@ const ContentPage = ({
       setTimeout(() => {
         setMessage(null);
       }, 5000);
-      const recipes = await recipeService.getAll();
+      const recipes = await recipeService.getAll(user.id);
       setRecipes(recipes);
     } catch (exception) {
       setMessage('Could not add a new recipe');
@@ -62,6 +61,8 @@ const ContentPage = ({
     console.log(`logged in visibility: ${visible}`);
   };
 
+  console.log(`user: ${user.username}`);
+
   return (
     <section class='vh-100 mt-4' style={{ backgroundColor: '#ccc' }}>
       <div class='d-flex justify-content-between align-items-center h-100'>
@@ -80,7 +81,7 @@ const ContentPage = ({
                   <button
                     class='btn btn-dark m-2'
                     onClick={() => {
-                      window.localStorage.removeItem('loggedBlogappUser');
+                      window.localStorage.removeItem('loggedRecipeappUser');
                       setUser(null);
                     }}
                   >

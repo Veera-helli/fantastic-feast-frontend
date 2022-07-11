@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
-import Recipelist from './components/Recipelist';
-//import LoginForm from './components/LoginForm';
 import recipeService from './services/recipes';
 import loginService from './services/login';
 import LoginPage from './components/LoginPage';
-import heroimg from './images/front_hero.jpg';
 import ContentPage from './components/ContentPage';
 
 const App = () => {
@@ -14,18 +11,20 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [errorMessage, setMessage] = useState('');
 
+  const loggedUserJSON = window.localStorage.getItem('loggedRecipeappUser');
+  const parsedUser = JSON.parse(loggedUserJSON);
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      recipeService.setToken(user.token);
+      setUser(parsedUser);
+      recipeService.setToken(parsedUser.token);
     }
   }, []);
 
   useEffect(() => {
+    console.log('>>', parsedUser);
     const fetchRecipes = async () => {
-      const newRecipes = await recipeService.getAll();
+      console.log('>>>>', parsedUser);
+      const newRecipes = await recipeService.getAll(parsedUser?.id);
       setRecipes(newRecipes);
     };
     fetchRecipes();
@@ -39,10 +38,12 @@ const App = () => {
         password,
       });
 
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
+      window.localStorage.setItem('loggedRecipeappUser', JSON.stringify(user));
 
       recipeService.setToken(user.token);
       setUser(user);
+      const newRecipes = await recipeService.getAll(user?.id);
+      setRecipes(newRecipes);
       setUsername('');
       setPassword('');
     } catch (exception) {
@@ -67,6 +68,7 @@ const App = () => {
     <ContentPage
       user={user}
       setUser={setUser}
+      errorMessage={errorMessage}
       setMessage={setMessage}
       recipes={recipes}
       setRecipes={setRecipes}
